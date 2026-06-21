@@ -1,6 +1,6 @@
 # Copytables
 
-![Copytables](banner.png)
+![Copytables](banner.webp)
 
 > ⚠️ **UNDER DEVELOPMENT** — this extension is being actively built and is not yet usable. The features below describe what is planned for the first release.
 
@@ -22,6 +22,29 @@ This is a from-scratch **Manifest V3** rewrite of an earlier, now-defunct extens
 ## Platform
 
 Chrome (Manifest V3) only for v1. Firefox/Edge support via the WebExtensions polyfill is a possible later addition.
+
+## Install (load unpacked)
+
+There's no Web Store listing yet, so install it manually from a local build.
+
+1. **Build the extension** (requires [Node.js](https://nodejs.org/)):
+
+   ```sh
+   npm install
+   npm run build
+   ```
+
+   This produces the loadable extension in the `dist/` folder.
+
+2. **Load it in Chrome:**
+   1. Open `chrome://extensions`.
+   2. Turn on **Developer mode** (top-right toggle).
+   3. Click **Load unpacked** and select the `dist/` folder.
+   4. Copytables appears in your toolbar. Pin it from the puzzle-piece menu for quick access.
+
+   On Chromium-based browsers (Edge, Brave, Opera) the steps are the same — open the browser's extensions page, enable developer mode, and load the `dist/` folder.
+
+To update after pulling new changes, re-run `npm run build`, then click the **Reload** icon on the Copytables card in `chrome://extensions`.
 
 ## Credits
 

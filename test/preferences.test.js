@@ -11,6 +11,15 @@ describe('DEFAULTS', () => {
     ]);
   });
 
+  it('uses Cmd (meta), not Ctrl, for the combination bindings', () => {
+    // Ctrl-click pops the macOS context menu, so Ctrl must not be a default.
+    for (const mods of Object.values(DEFAULTS.modifiers)) {
+      expect(mods).not.toContain('ctrl');
+    }
+    expect(DEFAULTS.modifiers.column).toEqual(['alt', 'meta']);
+    expect(DEFAULTS.modifiers.table).toEqual(['alt', 'meta', 'shift']);
+  });
+
   it('ships a number format and a default copy format', () => {
     expect(DEFAULTS.numberFormat).toEqual({ decimal: '.', group: ',' });
     expect(DEFAULTS.defaultFormat).toBe('asis');

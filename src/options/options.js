@@ -5,7 +5,14 @@ import { DEFAULTS, load, save } from '../lib/preferences.js';
 import { FORMATS } from '../lib/clipboard-format.js';
 
 const MODES = ['cell', 'column', 'row', 'table'];
-const MOD_KEYS = ['alt', 'ctrl', 'shift'];
+// Cmd (meta) is offered before Ctrl because the defaults use Cmd — Ctrl-click
+// pops the macOS context menu. Ctrl stays available for Windows/Linux users.
+const MOD_KEYS = [
+  { key: 'alt', label: 'alt' },
+  { key: 'meta', label: 'cmd' },
+  { key: 'shift', label: 'shift' },
+  { key: 'ctrl', label: 'ctrl' },
+];
 
 const els = {
   modifiers: document.getElementById('modifiers'),
@@ -27,14 +34,14 @@ for (const mode of MODES) {
   label.style.width = '70px';
   label.style.display = 'inline-block';
   row.appendChild(label);
-  for (const key of MOD_KEYS) {
+  for (const { key, label: keyLabel } of MOD_KEYS) {
     const wrap = document.createElement('label');
     wrap.style.margin = '0';
     const cb = document.createElement('input');
     cb.type = 'checkbox';
     cb.dataset.mode = mode;
     cb.dataset.key = key;
-    wrap.append(cb, document.createTextNode(' ' + key));
+    wrap.append(cb, document.createTextNode(' ' + keyLabel));
     row.appendChild(wrap);
   }
   els.modifiers.appendChild(row);

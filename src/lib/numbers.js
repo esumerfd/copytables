@@ -24,10 +24,16 @@ export function parseNumber(text, opts = {}) {
   s = s.split(group).join('');
   if (decimal !== '.') s = s.split(decimal).join('.');
 
-  // Strip everything that is not part of a JS numeric literal (currency,
-  // percent, stray letters), keeping digits, sign, dot and exponent marker.
-  s = s.replace(/[^0-9.eE+-]/g, '');
-  if (s === '' || s === '-' || s === '+' || s === '.') return null;
+  // Strip only currency symbols, a percent sign, and whitespace from the ends.
+  // Crucially we do NOT remove letters or interior characters: doing so would
+  // turn a prose cell ("$8 ... $20 ... $200") into one bogus concatenated
+  // number, or leave a lone number plucked out of a sentence ("5 stars").
+  s = s.replace(/^[\s$€£¥₹₩¢]+/, '').replace(/[\s%$€£¥₹₩¢]+$/, '');
+
+  // What remains must be a single, complete numeric token. Any leftover letters
+  // or a second number (so the cell is prose, not a value) fail this and the
+  // cell is ignored by the stats.
+  if (!/^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?$/.test(s)) return null;
 
   const n = Number(s);
   return Number.isNaN(n) ? null : n;
@@ -54,16 +60,29 @@ export function computeStats(values) {
 }
 
 /**
- * Parse a list of cell texts and compute stats over the numeric ones.
+ * Summarise a selection's cell texts: how many non-empty cells there are
+ * (`count`), and sum/avg/min/max over the subset that parses as numbers.
+ * `numericCount` is how many cells contributed to those numeric stats.
+ *
  * @param {string[]} texts
  * @param {Object} [opts]  Forwarded to parseNumber (decimal/group).
- * @returns {ReturnType<typeof computeStats>}
+ * @returns {{count:number, numericCount:number, sum:number, avg:number|null, min:number|null, max:number|null}}
  */
 export function statsFromTexts(texts, opts) {
   const values = [];
+  let count = 0;
   for (const t of texts) {
+    if (String(t ?? '').trim() !== '') count++;
     const n = parseNumber(t, opts);
     if (n !== null) values.push(n);
   }
-  return computeStats(values);
+  const numeric = computeStats(values);
+  return {
+    count,
+    numericCount: numeric.count,
+    sum: numeric.sum,
+    avg: numeric.avg,
+    min: numeric.min,
+    max: numeric.max,
+  };
 }

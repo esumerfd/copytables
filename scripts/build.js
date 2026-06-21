@@ -39,5 +39,6 @@ for (const b of bundles) {
 await cp(resolve(src, 'manifest.json'), resolve(dist, 'manifest.json'));
 await cp(resolve(src, 'popup/popup.html'), resolve(dist, 'popup/popup.html'));
 await cp(resolve(src, 'options/options.html'), resolve(dist, 'options/options.html'));
+await cp(resolve(src, 'icons'), resolve(dist, 'icons'), { recursive: true });
 
 console.log('Built extension into dist/');

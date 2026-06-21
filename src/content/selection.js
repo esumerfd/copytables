@@ -72,7 +72,11 @@ export class SelectionManager {
   onMouseDown(e) {
     if (e.button !== 0) return;
     const mode = matchMode(modifiersOf(e), this.prefs.modifiers);
-    if (!mode) return;
+    if (!mode) {
+      // A plain click (no selection modifier) drops any existing selection.
+      if (this.matrix) this.clear();
+      return;
+    }
     const cell = e.target.closest && e.target.closest('td, th');
     const table = cell && cell.closest('table');
     if (!cell || !table) return;
@@ -103,6 +107,7 @@ export class SelectionManager {
   }
 
   cellUnder(x, y) {
+    if (typeof document.elementFromPoint !== 'function') return null;
     const target = document.elementFromPoint(x, y);
     const cell = target && target.closest && target.closest('td, th');
     return cell && cell.closest('table') === this.table ? cell : null;

@@ -29,6 +29,21 @@ describe('parseNumber', () => {
     expect(parseNumber('')).toBeNull();
     expect(parseNumber('   ')).toBeNull();
   });
+
+  it('does not concatenate digits from prose cells with multiple numbers', () => {
+    // Regression: a multi-line/price cell must not collapse into one big number.
+    expect(
+      parseNumber('$8/month (Go, with ads)$20/month (Plus)$200/month (Pro)')
+    ).toBeNull();
+    expect(parseNumber('Deep thinking, 5 stars, high quality')).toBeNull();
+    expect(parseNumber('100-200')).toBeNull();
+    expect(parseNumber('3 of 5')).toBeNull();
+  });
+
+  it('still parses a single value carrying units or currency', () => {
+    expect(parseNumber('$200')).toBe(200);
+    expect(parseNumber('12.5%')).toBe(12.5);
+  });
 });
 
 describe('computeStats', () => {
@@ -54,11 +69,19 @@ describe('computeStats', () => {
 });
 
 describe('statsFromTexts', () => {
-  it('parses only the numeric cells and ignores the rest', () => {
+  it('counts non-empty cells and numeric values separately', () => {
     const stats = statsFromTexts(['1,000', 'n/a', '500', '']);
-    expect(stats.count).toBe(2);
+    expect(stats.count).toBe(3); // non-empty selected cells
+    expect(stats.numericCount).toBe(2); // cells parseable as numbers
     expect(stats.sum).toBe(1500);
     expect(stats.max).toBe(1000);
     expect(stats.min).toBe(500);
+  });
+
+  it('counts text-only selections without any numeric stats', () => {
+    const stats = statsFromTexts(['Best For', 'Versatile tasks', 'Writing']);
+    expect(stats.count).toBe(3);
+    expect(stats.numericCount).toBe(0);
+    expect(stats.sum).toBe(0);
   });
 });

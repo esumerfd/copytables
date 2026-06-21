@@ -5,12 +5,13 @@
 
 export const DEFAULTS = Object.freeze({
   // Modifier sets that trigger each selection mode (see lib/modifiers.js).
-  // Mirrors the original: Alt = cell, Alt+Ctrl/Cmd = column.
+  // Alt = cell, Alt+Cmd = column, Alt+Shift = row, Alt+Cmd+Shift = table.
+  // Cmd (meta) is used instead of Ctrl: Ctrl-click pops the macOS context menu.
   modifiers: {
     cell: ['alt'],
-    column: ['alt', 'ctrl'],
+    column: ['alt', 'meta'],
     row: ['alt', 'shift'],
-    table: ['alt', 'ctrl', 'shift'],
+    table: ['alt', 'meta', 'shift'],
   },
   // Locale-aware numeric parsing for the infobox.
   numberFormat: { decimal: '.', group: ',' },

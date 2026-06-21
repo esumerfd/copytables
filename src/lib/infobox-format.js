@@ -23,21 +23,25 @@ export function formatNumber(n, numberFormat) {
 }
 
 /**
- * Build the infobox rows from a stats object.
- * @param {ReturnType<import('./numbers.js').computeStats>} stats
+ * Build the infobox rows from a stats summary. Count is always shown (the
+ * number of selected cells); the numeric rows appear only when the selection
+ * contains values that parse as numbers.
+ * @param {{count:number, numericCount?:number, sum:number, avg:number|null, min:number|null, max:number|null}} stats
  * @param {{decimal:string, group:string}} numberFormat
  * @returns {Array<{label:string, value:string}>}
  */
 export function formatStats(stats, numberFormat) {
-  if (stats.count === 0) {
-    return [{ label: 'Count', value: '0' }];
+  const rows = [{ label: 'Count', value: String(stats.count) }];
+  // Fall back to `count` so a plain numeric stats object still renders its rows.
+  const numericCount = stats.numericCount ?? stats.count;
+  if (numericCount > 0) {
+    const f = (n) => formatNumber(n, numberFormat);
+    rows.push(
+      { label: 'Sum', value: f(stats.sum) },
+      { label: 'Avg', value: f(stats.avg) },
+      { label: 'Min', value: f(stats.min) },
+      { label: 'Max', value: f(stats.max) }
+    );
   }
-  const f = (n) => formatNumber(n, numberFormat);
-  return [
-    { label: 'Count', value: String(stats.count) },
-    { label: 'Sum', value: f(stats.sum) },
-    { label: 'Avg', value: f(stats.avg) },
-    { label: 'Min', value: f(stats.min) },
-    { label: 'Max', value: f(stats.max) },
-  ];
+  return rows;
 }
