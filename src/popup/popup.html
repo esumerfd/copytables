@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { font: 13px/1.4 system-ui, sans-serif; margin: 0; width: 220px; }
+      h1 { font-size: 13px; margin: 0; padding: 10px 12px 6px; color: #555; }
+      button {
+        display: block; width: 100%; text-align: left; border: none;
+        background: #fff; padding: 9px 12px; font: inherit; cursor: pointer;
+      }
+      button:hover { background: #e3f2fd; }
+      .hint { padding: 6px 12px 10px; color: #999; font-size: 11px; }
+      #status { color: #2e7d32; }
+    </style>
+  </head>
+  <body>
+    <h1>Copy selected table</h1>
+    <div id="buttons"></div>
+    <div class="hint" id="hint">Select cells on the page first.</div>
+    <script src="popup.js"></script>
+  </body>
+</html>

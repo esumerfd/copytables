@@ -1,0 +1,21 @@
+{
+  "name": "copytables",
+  "version": "1.0.0",
+  "description": "Manifest V3 rewrite of copytables — select and copy HTML table cells like a spreadsheet range.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src test",
+    "build": "node scripts/build.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "esbuild": "^0.23.1",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "jsdom": "^24.0.0",
+    "vitest": "^2.0.0"
+  }
+}

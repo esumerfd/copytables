@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Copytables",
+  "version": "1.0.0",
+  "description": "Select and copy HTML table cells like a spreadsheet range — as rich HTML, CSV, or TSV.",
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Copytables"
+  },
+  "options_page": "options/options.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "all_frames": false,
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "copy_asis": {
+      "description": "Copy selection as rich HTML (As is)"
+    },
+    "copy_csv": {
+      "description": "Copy selection as CSV"
+    },
+    "copy_tsv": {
+      "description": "Copy selection as TSV"
+    },
+    "open_options": {
+      "description": "Open Copytables options"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Copytables Options</title>
+    <style>
+      body { font: 14px/1.5 system-ui, sans-serif; margin: 0; padding: 24px; max-width: 560px; color: #222; }
+      h1 { font-size: 18px; }
+      fieldset { border: 1px solid #ddd; border-radius: 6px; margin: 0 0 18px; padding: 14px 16px; }
+      legend { font-weight: 600; padding: 0 6px; }
+      label { display: block; margin: 8px 0; }
+      select, input { font: inherit; padding: 3px 6px; }
+      .row { display: flex; gap: 12px; align-items: center; }
+      .muted { color: #777; font-size: 13px; }
+      a { color: #1565c0; }
+      #saved { color: #2e7d32; margin-left: 10px; }
+    </style>
+  </head>
+  <body>
+    <h1>Copytables Options</h1>
+
+    <fieldset>
+      <legend>Selection modifiers</legend>
+      <p class="muted">Hold these keys and drag to select. Cmd is treated as Ctrl on macOS.</p>
+      <div id="modifiers"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Default copy format</legend>
+      <label>
+        Used for <kbd>Ctrl/Cmd+C</kbd> on a selection:
+        <select id="defaultFormat"></select>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Numbers (infobox)</legend>
+      <label class="row">Decimal separator
+        <select id="decimal"><option value=".">.</option><option value=",">,</option></select>
+      </label>
+      <label class="row">Group separator
+        <select id="group"><option value=",">,</option><option value=".">.</option><option value=" ">space</option><option value="">none</option></select>
+      </label>
+      <label><input type="checkbox" id="showInfobox" /> Show the stats infobox while selecting</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Keyboard shortcuts</legend>
+      <p class="muted">Configure copy shortcuts at
+        <a href="#" id="shortcutsLink">chrome://extensions/shortcuts</a>.</p>
+    </fieldset>
+
+    <button id="save">Save</button><span id="saved" hidden>Saved</span>
+    <script src="options.js"></script>
+  </body>
+</html>
