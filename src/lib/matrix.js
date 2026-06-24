@@ -2,7 +2,9 @@
 //
 // buildMatrix() walks <tr>/<td>/<th> into a row/col-indexed grid, expanding
 // rowspan/colspan so every grid position maps to the DOM cell occupying it.
-// toDelimited() flattens that grid to CSV/TSV, trimmed to the selected cells.
+// toDelimited() flattens that grid to delimited text (CSV for user copies; the
+// tab delimiter is used only for the "as is" rich-copy plain-text fallback),
+// trimmed to the selected cells.
 //
 // This module has zero DOM-mutation side effects, which makes it the one piece
 // of the codebase that is unit-tested directly (see test/matrix.test.js).
@@ -114,6 +116,31 @@ export function toDelimited(matrix, opts = {}) {
   return matrixOut
     .map((row) => row.map((f) => quoteField(f, delimiter)).join(delimiter))
     .join('\n');
+}
+
+/**
+ * Width (in grid columns) of the bounding box of the selected cells. This is the
+ * number of columns a CSV copy of the selection would produce, so callers use it
+ * to decide whether a selection is "multi-column" and should auto-copy as CSV.
+ * @param {Matrix} matrix
+ * @param {(el: HTMLTableCellElement) => boolean} [isSelected]  Defaults to all cells.
+ * @returns {number}  0 when nothing is selected.
+ */
+export function selectedColumnSpan(matrix, isSelected) {
+  const sel = isSelected ?? (() => true);
+  const { grid, rows, cols } = matrix;
+  let minC = Infinity;
+  let maxC = -Infinity;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const cell = grid[r][c];
+      if (cell && sel(cell.el)) {
+        if (c < minC) minC = c;
+        if (c > maxC) maxC = c;
+      }
+    }
+  }
+  return maxC < minC ? 0 : maxC - minC + 1;
 }
 
 function transpose2d(rows) {

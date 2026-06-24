@@ -1,7 +1,7 @@
 // Clipboard writes, performed in the content script under user activation.
 //
-//  - Text formats (CSV/TSV): built from the tested matrix flattener and written
-//    with navigator.clipboard.writeText().
+//  - CSV: built from the tested matrix flattener and written with
+//    navigator.clipboard.writeText().
 //  - "As is": a clone of the selected block with key computed styles inlined,
 //    written as text/html (with a tab-delimited text/plain fallback). This is
 //    the modern-API path from the design's clipboard strategy.
@@ -17,7 +17,7 @@ const STYLE_PROPS = [
   'text-align', 'vertical-align', 'padding', 'white-space',
 ];
 
-/** Copy a CSV/TSV (optionally transposed) format. */
+/** Copy a text format (CSV) to the clipboard as plain text. */
 export async function copyTextFormat(matrix, formatId, isSelected) {
   const text = clipboardText(matrix, formatId, { isSelected });
   await navigator.clipboard.writeText(text);

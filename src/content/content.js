@@ -4,7 +4,7 @@
 
 import { load } from '../lib/preferences.js';
 import { isTextFormat, clipboardText } from '../lib/clipboard-format.js';
-import { toDelimited } from '../lib/matrix.js';
+import { toDelimited, selectedColumnSpan } from '../lib/matrix.js';
 import { SelectionManager } from './selection.js';
 import { copyAsIs, copyTextFormat, buildStyledTable } from './clipboard.js';
 
@@ -35,7 +35,11 @@ async function init() {
 function onNativeCopy(e) {
   const sel = manager.getSelection();
   if (!sel) return;
-  const format = manager.prefs.defaultFormat;
+  // A selection spanning more than one column always copies as CSV — that's the
+  // useful spreadsheet-paste — regardless of the configured default. Single-cell
+  // and single-column selections fall back to the default format.
+  const multiColumn = selectedColumnSpan(sel.matrix, sel.isSelected) > 1;
+  const format = multiColumn ? 'csv' : manager.prefs.defaultFormat;
   e.preventDefault();
   if (isTextFormat(format)) {
     e.clipboardData.setData('text/plain', clipboardText(sel.matrix, format, { isSelected: sel.isSelected }));

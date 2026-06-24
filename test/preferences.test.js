@@ -40,7 +40,7 @@ describe('mergePrefs', () => {
   });
 
   it('does not mutate the DEFAULTS object', () => {
-    mergePrefs({ defaultFormat: 'tsv' });
+    mergePrefs({ defaultFormat: 'csv' });
     expect(DEFAULTS.defaultFormat).toBe('asis');
   });
 });

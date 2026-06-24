@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildMatrix, toDelimited } from '../src/lib/matrix.js';
+import { buildMatrix, toDelimited, selectedColumnSpan } from '../src/lib/matrix.js';
 
 /** Build a <table> from a 2D array of cell descriptors and return the element. */
 function makeTable(rows) {
@@ -116,5 +116,51 @@ describe('toDelimited', () => {
       [{ text: 'c' }, { text: 'd' }],
     ]);
     expect(toDelimited(buildMatrix(table), { delimiter: ',' })).toBe('wide,\nc,d');
+  });
+});
+
+describe('selectedColumnSpan', () => {
+  const grid3x3 = () =>
+    buildMatrix(
+      makeTable([
+        [{ text: 'a' }, { text: 'b' }, { text: 'c' }],
+        [{ text: 'd' }, { text: 'e' }, { text: 'f' }],
+        [{ text: 'g' }, { text: 'h' }, { text: 'i' }],
+      ])
+    );
+
+  const selecting = (...texts) => {
+    const set = new Set(texts);
+    return (el) => set.has(el.textContent);
+  };
+
+  it('returns the bounding-box width of the whole table by default', () => {
+    expect(selectedColumnSpan(grid3x3())).toBe(3);
+  });
+
+  it('returns 0 when nothing is selected', () => {
+    expect(selectedColumnSpan(grid3x3(), () => false)).toBe(0);
+  });
+
+  it('returns 1 for a single selected cell', () => {
+    expect(selectedColumnSpan(grid3x3(), selecting('e'))).toBe(1);
+  });
+
+  it('returns 1 for a single-column selection spanning several rows', () => {
+    expect(selectedColumnSpan(grid3x3(), selecting('b', 'e', 'h'))).toBe(1);
+  });
+
+  it('returns the bounding-box width for a multi-column selection', () => {
+    expect(selectedColumnSpan(grid3x3(), selecting('e', 'f', 'h', 'i'))).toBe(2);
+  });
+
+  it('counts a single colspanned cell as the columns it visually spans', () => {
+    const m = buildMatrix(
+      makeTable([
+        [{ text: 'wide', colspan: 2 }],
+        [{ text: 'c' }, { text: 'd' }],
+      ])
+    );
+    expect(selectedColumnSpan(m, selecting('wide'))).toBe(2);
   });
 });

@@ -6,7 +6,6 @@
 const COMMAND_FORMAT = {
   copy_asis: 'asis',
   copy_csv: 'csv',
-  copy_tsv: 'tsv',
 };
 
 chrome.commands.onCommand.addListener(async (command) => {

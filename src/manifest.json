@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Copytables",
   "version": "1.0.0",
-  "description": "Select and copy HTML table cells like a spreadsheet range — as rich HTML, CSV, or TSV.",
+  "description": "Select and copy HTML table cells like a spreadsheet range — multi-column selections copy as CSV, or copy the styled table as rich HTML.",
   "permissions": ["storage"],
   "icons": {
     "16": "icons/icon16.png",
@@ -39,9 +39,6 @@
     },
     "copy_csv": {
       "description": "Copy selection as CSV"
-    },
-    "copy_tsv": {
-      "description": "Copy selection as TSV"
     },
     "open_options": {
       "description": "Open Copytables options"

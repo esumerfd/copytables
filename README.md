@@ -4,7 +4,7 @@
 
 > ⚠️ **UNDER DEVELOPMENT** — this extension is being actively built and is not yet usable. The features below describe what is planned for the first release.
 
-A Chrome extension for selecting and copying HTML table cells like a spreadsheet range — hold a modifier key and drag to select cells, columns, rows, or whole tables, then copy them as styled rich text, CSV, or tab-delimited text.
+A Chrome extension for selecting and copying HTML table cells like a spreadsheet range — hold a modifier key and drag to select cells, columns, rows, or whole tables, then copy them. Multi-column selections copy as CSV automatically; you can also copy the styled table as rich text.
 
 This is a from-scratch **Manifest V3** rewrite of an earlier, now-defunct extension. The original was an excellent tool but stopped working when Chrome disabled Manifest V2 extensions in 2025, and its core copy mechanism relied on a background-page DOM trick that has no equivalent under MV3's service-worker model. This project recreates the functionality on a clean MV3 foundation.
 
@@ -12,10 +12,9 @@ This is a from-scratch **Manifest V3** rewrite of an earlier, now-defunct extens
 
 - **Modifier-key drag select** — hold a configurable modifier and drag to select cells, columns, rows, or entire tables, with auto-scroll on tall tables.
 - **Copy formats:**
+  - **CSV (automatic)** — any selection spanning more than one column copies as comma-delimited, properly quoted CSV. There's no format to choose: select multiple columns and you get a useful spreadsheet paste. (CSV is also available as an explicit action for single cells/columns.)
   - **As is** — rich HTML that pastes into Word/Docs looking like the on-screen table.
-  - **CSV** — comma-delimited, properly quoted, with optional row/column transpose.
-  - **TSV** — tab-delimited, with optional transpose, for Excel/Sheets.
-  - Merged cells (`rowspan`/`colspan`) are preserved across all formats.
+  - Merged cells (`rowspan`/`colspan`) are preserved across both formats.
 - **Infobox** — a floating count/sum/average/min/max summary of the numeric values in the current selection.
 - **Configurable** — remap modifier keys and keyboard shortcuts; locale-aware number parsing (decimal/group separators) for the infobox.
 

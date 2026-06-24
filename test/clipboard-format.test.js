@@ -9,32 +9,19 @@ function table2x2() {
 }
 
 describe('format registry', () => {
-  it('lists the v1 copy formats', () => {
-    expect(FORMATS.map((f) => f.id)).toEqual(['asis', 'csv', 'csv-t', 'tsv', 'tsv-t']);
+  it('lists only the two selectable v1 copy actions (no TSV, no transpose)', () => {
+    expect(FORMATS.map((f) => f.id)).toEqual(['asis', 'csv']);
   });
 
   it('marks asis as the only non-text format', () => {
     expect(isTextFormat('asis')).toBe(false);
     expect(isTextFormat('csv')).toBe(true);
-    expect(isTextFormat('tsv-t')).toBe(true);
   });
 });
 
 describe('clipboardText', () => {
   it('builds CSV', () => {
     expect(clipboardText(table2x2(), 'csv')).toBe('a,b\nc,d');
-  });
-
-  it('builds transposed CSV', () => {
-    expect(clipboardText(table2x2(), 'csv-t')).toBe('a,c\nb,d');
-  });
-
-  it('builds TSV', () => {
-    expect(clipboardText(table2x2(), 'tsv')).toBe('a\tb\nc\td');
-  });
-
-  it('builds transposed TSV', () => {
-    expect(clipboardText(table2x2(), 'tsv-t')).toBe('a\tc\nb\td');
   });
 
   it('throws for a non-text format', () => {
